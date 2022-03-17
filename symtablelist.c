@@ -67,7 +67,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 
     assert(oSymTable != NULL); 
     assert(pcKey != NULL); 
-    assert(pvValue != NULL); 
+    /* assert(pvValue != NULL); */
 
     for (currentNode = oSymTable->first; currentNode != NULL; 
     currentNode = nextNode)
