@@ -67,7 +67,6 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 
     assert(oSymTable != NULL); 
     assert(pcKey != NULL); 
-    /* assert(pvValue != NULL); */
 
     for (currentNode = oSymTable->first; currentNode != NULL; 
     currentNode = nextNode)
@@ -105,7 +104,6 @@ const void *pvValue)
 
      assert(oSymTable != NULL); 
     assert(pcKey != NULL); 
-    /* assert(pvValue != NULL); */
 
     for (currentNode = oSymTable->first; currentNode != NULL; 
     currentNode = nextNode)
@@ -169,7 +167,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey)
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     struct Node *currentNode; 
     struct Node *nextNode; 
-    struct Node *previousNode; 
+    struct Node *previousNode = NULL; 
     void *returned; 
 
     assert(oSymTable != NULL); 
@@ -178,58 +176,41 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     for (currentNode = oSymTable->first; currentNode != NULL; 
     currentNode = nextNode)
     {
-        
         nextNode = currentNode->next; 
-       
-        if (strcmp(currentNode->Key, pcKey) == 0)
-         {
-            
+        if (strcmp(currentNode->Key, pcKey) == 0) {
              (oSymTable->count)--;
              returned = (void*) currentNode->Value; 
-
              /* corner case for only 1 node*/
-             if(oSymTable->first == currentNode && nextNode == NULL)
-             {
+             if(oSymTable->first == currentNode && nextNode == NULL) {
                  oSymTable->first = nextNode; 
                  free(currentNode->Key);
                  free(currentNode); 
                  oSymTable->first = NULL; 
                  return returned; 
-             }
-
+                 }
              /* corner case for at end */
-            
              if(nextNode == NULL) {
                  free(currentNode->Key);
                  free(currentNode); 
                  previousNode->next = NULL;  
                  return returned; 
-             }
-
+                 }
             /* corner case for at front */
-             if(oSymTable->first == currentNode)
-             {
+             if(oSymTable->first == currentNode) {
                  oSymTable->first = nextNode; 
                  free(currentNode->Key);
                  free(currentNode); 
                  return returned; 
-             }
-
-             
+                 }
              /* normal case for in middle */
              previousNode->next = nextNode; 
              free(currentNode->Key);
              free(currentNode); 
              return returned; 
-
-
-
-             
-         }
+             }
          previousNode = currentNode; 
-    }
+         }
     return NULL; 
-
 }
 
 void SymTable_map(SymTable_T oSymTable,
