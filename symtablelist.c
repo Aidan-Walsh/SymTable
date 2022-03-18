@@ -73,7 +73,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     currentNode = nextNode)
     {
         nextNode = currentNode->next; 
-        if (*(currentNode->Key) == *pcKey) {
+        if (strcmp(pcKey, currentNode->Key) == 0) {
             return 0; 
         }
     }
@@ -200,9 +200,9 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
              /* corner case for at end */
             
              if(nextNode == NULL) {
-                 
                  free(currentNode->Key);
                  free(currentNode); 
+                 previousNode->next = NULL;  
                  return returned; 
              }
 
@@ -212,13 +212,11 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
                  oSymTable->first = nextNode; 
                  free(currentNode->Key);
                  free(currentNode); 
-                 oSymTable->first = NULL; 
                  return returned; 
              }
 
              
              /* normal case for in middle */
-
              previousNode->next = nextNode; 
              free(currentNode->Key);
              free(currentNode); 
