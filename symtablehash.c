@@ -62,7 +62,10 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
         return uHash % uBucketCount;
 }
 
-
+/* local function that expands the size of oSymTable to
+sizes 509, 1021, 2039, 4093, 8191, 16381, 32749, and 65521. Hash 
+table expands when its stored bindings reaches the size of the array.
+Assert oSymTable is not NULL and ensure enough memory is available*/
 static void SymTable_expand(SymTable_T oSymTable) {
 size_t i; 
 
@@ -84,8 +87,12 @@ assert(oSymTable != NULL);
  (oSymTable->index)++;  
 
      newTable = calloc(binCountArray[oSymTable->index], 
-     sizeof(struct Node*)); 
+     sizeof(struct Node*));
      
+/* not enough space so return */
+     if (newTable == NULL) {
+        return; 
+     }
 /*go through entire hash table in use*/
 for (i = 0; i< binCountArray[(oSymTable->index)-1]; i++) {
          
@@ -113,9 +120,9 @@ for (i = 0; i< binCountArray[(oSymTable->index)-1]; i++) {
        }
 
 } 
-
+        
 } 
- 
+free(oSymTable->table);  
 /* point current table to new table*/
 oSymTable->table = newTable; 
 
@@ -137,7 +144,12 @@ SymTable_T SymTable_new(void)
     memory */
      oSymTable->index = 0; 
      oSymTable->count = 0;  
-     oSymTable->table = calloc(509, sizeof(struct Node*)); 
+     oSymTable->table = calloc(binCountArray[oSymTable->index],
+                               sizeof(struct Node*));
+
+     if(oSymTable->table == NULL) {
+        return NULL; 
+     }
 
     return oSymTable; 
 
@@ -164,6 +176,7 @@ void SymTable_free(SymTable_T oSymTable) {
                 }       
         
     }
+    free(oSymTable->table); 
     free(oSymTable); 
 }
 
@@ -214,7 +227,7 @@ const void *pvValue) {
             SymTable_expand(oSymTable); 
             newIndex = SymTable_hash(pcKey, binCountArray
             [(oSymTable->index)]); 
-      } 
+            }   
         
     newNode = (struct Node*)malloc(sizeof(struct Node)); 
             if (newNode == NULL) {

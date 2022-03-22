@@ -222,10 +222,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL); 
    
     for (currentNode = oSymTable->first; currentNode != NULL; 
-    currentNode = nextNode)
-    {
+    currentNode = nextNode)    {
         nextNode = currentNode->next; 
-
         /* if we find the Key, then we remove*/
         if (strcmp(currentNode->Key, pcKey) == 0) {
              (oSymTable->count)--;
@@ -237,8 +235,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey) {
                  free(currentNode->Key);
                  free(currentNode); 
                  oSymTable->first = NULL; 
-                 return returned; 
-                 }
+                 return returned;  }
              /* corner case for at end so our previous node's "next" 
               is NULL since we just removed our current and there 
               is nothing after it*/
