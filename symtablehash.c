@@ -10,7 +10,7 @@
 #include "symtable.h"
 
 /* array that stores the sizes of the changing hash table */
-static int binCountArray[8]={509, 1021, 2039, 4093, 8191, 16381, 
+static size_t binCountArray[8]={509, 1021, 2039, 4093, 8191, 16381, 
 32749, 65521};
 
 /* structure that describes SymTable_T */
@@ -64,7 +64,7 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 
 
 static void SymTable_expand(SymTable_T oSymTable) {
-int i; 
+size_t i; 
 
 /*this stores the new hash table*/
 struct Node **newTable;
@@ -125,7 +125,6 @@ oSymTable->table = newTable;
 SymTable_T SymTable_new(void)
 {
     SymTable_T oSymTable; 
-    int i; 
 
     /* allocate memory for size of SymTable struct */
     oSymTable = (SymTable_T)malloc(sizeof(struct SymTable)); 
@@ -139,17 +138,7 @@ SymTable_T SymTable_new(void)
      oSymTable->index = 0; 
      oSymTable->count = 0;  
      oSymTable->table = calloc(509, sizeof(struct Node*)); 
-   /* for (i = 0; i < binCountArray[oSymTable->index]; i++){
-        oSymTable->table[i] = (struct Node*) 
-        malloc(sizeof(struct Node*));
-        if (oSymTable->table[i] == NULL)
-            return NULL; 
-        oSymTable->table[i] = NULL; 
-         
-     } */
 
-     
-  
     return oSymTable; 
 
 }
@@ -159,7 +148,7 @@ void SymTable_free(SymTable_T oSymTable) {
     /* create nodes for traversal */
     struct Node *currentNode; 
     struct Node *nextNode; 
-    int i; 
+    size_t i; 
     
    assert(oSymTable != NULL); 
 
@@ -215,7 +204,8 @@ const void *pvValue) {
      (oSymTable->count)++; 
 
     /* since we might be hitting a boundary, we test to see this, 
-    make sure we dont go over the hash table limit, and call expand
+    make sure we dont go over the hash table limit (given by 
+    the 7th index of the array), and call expand
     if we need to and get the new hash index since we have just 
     changed the size */
      if (oSymTable->count == binCountArray[oSymTable->index] &&
@@ -408,7 +398,7 @@ const void *pvExtra) {
     /* nodes for traversal */
     struct Node *currentNode; 
     struct Node *nextNode; 
-    int i; 
+    size_t i; 
 
      assert(oSymTable != NULL); 
      assert(pfApply != NULL); 
