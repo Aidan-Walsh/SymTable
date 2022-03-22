@@ -24,7 +24,7 @@ struct SymTable
     size_t count; 
 
     /* our array of Node pointers that is our hash table */
-    struct Node *table[];
+    struct Node **table;
      
 
 };
