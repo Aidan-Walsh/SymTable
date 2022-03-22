@@ -3,7 +3,7 @@ Assignment 3 readme File
 ------------------------------------------------------------------------
 What is your name?
 
-
+Aidan Walsh
 
 ------------------------------------------------------------------------
 What authorized sources of information did you use to complete the
@@ -12,6 +12,11 @@ in the "Policies" web page (also available on armlab in the file
 ~cos217/AuthorizedSourcesList ) to this section of the readme file,
 and edit it as appropriate.
 
+The course's lectures.
+
+The course's precepts.
+
+The course's website.
 
 
 ------------------------------------------------------------------------
@@ -26,11 +31,13 @@ interaction, may additionally require the interaction being reported
 to the Committee on Discipline. Write "None" if you used no
 unauthorized sources of information.
 
-
+None
 
 ------------------------------------------------------------------------
 What is your assessment of the assignment? Was it helpful? Was it fun?
 
+This assignment was helpful and quite fun to do! It was very nice with 
+    reinforcing all the concepts and helped me improve. 
 
 
 ------------------------------------------------------------------------
@@ -38,7 +45,8 @@ What is your assessment of the assignment? Was it helpful? Was it fun?
 will help your grader to grade it in the most favorable light? In
 particular, what bugs are in your submission?
 
-
+No known bugs! I hope you understand why I disagree with the repeated
+warnings. 
 
 ------------------------------------------------------------------------
 What warnings does splint generate on symtablelist.c, and what are your
@@ -46,6 +54,18 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
+symtablelist.c: (in function SymTable_remove)
+symtablelist.c:248:18: Variable previousNode used before definition
+An rvalue is used that may not be initialized to a value on some 
+execution path. (Use -usedef to inhibit warning)
+symtablelist.c:263:14: Variable previousNode used before definition
+
+I disagree with these because both of these warnings state that 
+previousNode; however, in my cases that I have, I only use 
+previousNode for the case of being on middle Node or at the end. 
+To be in either of the cases, the loop must have gone through at least
+once, thus previousNode is always defined so there exists no path where
+it is undefined. 
 
 
 ------------------------------------------------------------------------
@@ -54,7 +74,18 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
+symtablelist.c: line 80: medium priority:
+Do you want to validate 'pvValue' through an assert?
 
+symtablelist.c: line 129: medium priority:
+Do you want to validate 'pvValue' through an assert?
+
+symtablelist.c: line 274: medium priority:
+Do you want to validate 'pvExtra' through an assert?
+
+pvValue and pvExtra do not need to be validated because they can be 
+NULL values. This is because someone may want to associate NULL with 
+a key and may not want to add anything extra to the pfapply function. 
 
 ------------------------------------------------------------------------
 What warnings does splint generate on symtablehash.c, and what are your
@@ -62,13 +93,38 @@ disagreements with them? Copy the splint warnings here, and express your
 disagreement after each warning. If there are no warnings, then write
 "None."
 
+symtablehash.c: (in function SymTable_remove)
+symtablehash.c:372:18: Variable previousNode used before definition
+An rvalue is used that may not be initialized to a value on some execution
+path. (Use -usedef to inhibit warning)
+symtablehash.c:387:14: Variable previousNode used before definition
 
+Just like before, I only use 
+previousNode for the case of being on a middle Node or at the end of a 
+linked list. 
+To be in either of the cases, the loop must have gone through at least
+once, thus previousNode is always defined so there exists no path where
+it is undefined. 
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on symtablehash.c, and what are your
 disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
+
+symtablehash.c: line 188: medium priority:
+   Do you want to validate 'pvValue' through an assert?
+
+   symtablehash.c: line 257: medium priority:
+   Do you want to validate 'pvValue' through an assert?
+
+   symtablehash.c: line 408: medium priority:
+   Do you want to validate 'pvExtra' through an assert?
+
+   Like the other function, pvValue and pvExtra do not need to be 
+    validated because they can be NULL values. This is because 
+    someone may want to associate NULL with a key and may not 
+    want to add anything extra to the pfapply function. 
 
 
 
@@ -79,22 +135,24 @@ implementation, (2) your non-expanding hash table implementation, and
 (3) your expanding hash table implementation? Fill in the blanks.
 
 The linked list implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.000000 seconds.
+-- 5000 bindings consumed 1.06 seconds.
+-- 50000 bindings consumed 104.140000 seconds.
+-- 500000 bindings consumed more than 5 minutes seconds.
 
 The non-expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.000000 seconds.
+-- 5000 bindings consumed 0.010000 seconds.
+-- 50000 bindings consumed 0.400000 seconds.
+-- 500000 bindings consumed 69.460000 seconds.
 
 The expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed 0.000000 seconds.
+-- 500 bindings consumed 0.000000 seconds.
+-- 5000 bindings consumed 0.010000 seconds.
+-- 50000 bindings consumed 0.160000 seconds.
+-- 500000 bindings consumed 2.000000 seconds.
+
+
