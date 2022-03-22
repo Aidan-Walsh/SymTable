@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "symtable.h"
 
 /* array that stores the sizes of the changing hash table */
@@ -61,60 +62,47 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
         return uHash % uBucketCount;
 }
 
-/*
+
 static void SymTable_expand(SymTable_T oSymTable) {
 int i; 
 
-this stores the new hash table
-struct Node *newTable[(oSymTable->index)+1];
+/*this stores the new hash table*/
+struct Node **newTable;
 
-nodes for traversal
+/*nodes for traversal*/
 struct Node *currentNode; 
 struct Node *nextNode; 
 
-node that stores the current node we are looking at (likely no need for it)
+/*node that stores the current node we are looking at (likely no need for it)*/
 struct Node *testNode; 
 
-value that stores hash index
+/*value that stores hash index*/
 size_t newIndex; 
 assert(oSymTable != NULL);
 
-increment the index for the new size of hash table
+/*increment the index for the new size of hash table*/
  (oSymTable->index)++;  
 
-allocate memory for new hash table
- for (i = 0; i < binCountArray[oSymTable->index] ; i++){
-    
-        newTable[i] = (struct Node*) malloc(sizeof(struct Node*));
-        
-        make sure proper memory available
-        if (newTable[i] == NULL)
-            return; 
-        
-        newTable[i] = NULL; 
-        
-        
-     } 
+     newTable = calloc(binCountArray[oSymTable->index], 
+     sizeof(struct Node*)); 
      
-go through entire hash table in use
+/*go through entire hash table in use*/
 for (i = 0; i< binCountArray[(oSymTable->index)-1]; i++) {
          
-         going through each index and ensure the value is not equal to 0.
-         the value being equal to 0 was causing this method to be very buggy
-         since NULL == 0. Thus, in the tester program, I was missing the 
-         key that stored 0 but everything else worked
-         for (currentNode = oSymTable->table[i]; (currentNode != NULL
-          && strcmp(currentNode->Value, "0")!=0 ); 
+         /*going through each index*/
+         for (currentNode = oSymTable->table[i]; (currentNode != NULL); 
     currentNode = nextNode)
     { 
         
-        get hashing index and make pointer of new hash table point to
-        the current node we are looking at
+       /* get hashing index and make pointer of new hash table point to
+        the current node we are looking at*/
         nextNode = currentNode->next; 
         testNode = currentNode; 
         newIndex = SymTable_hash(currentNode->Key, 
         binCountArray[oSymTable->index]); 
 
+        /* if we are moving it to the front, make sure its next node NULL
+        else, make it just the first node */
        if (newTable[newIndex] == NULL) {
        testNode->next = NULL; 
        newTable[newIndex] = testNode;
@@ -128,11 +116,11 @@ for (i = 0; i< binCountArray[(oSymTable->index)-1]; i++) {
 
 } 
  
- point current table to new table
-for (i = 0; i < binCountArray[oSymTable->index]; i++)
-        oSymTable->table[i] = newTable[i];
+/* point current table to new table*/
+oSymTable->table = newTable; 
+
 }
-*/
+
 
 SymTable_T SymTable_new(void)
 {
@@ -150,14 +138,15 @@ SymTable_T SymTable_new(void)
     memory */
      oSymTable->index = 0; 
      oSymTable->count = 0;  
-    for (i = 0; i < binCountArray[oSymTable->index]; i++){
+     oSymTable->table = calloc(509, sizeof(struct Node*)); 
+   /* for (i = 0; i < binCountArray[oSymTable->index]; i++){
         oSymTable->table[i] = (struct Node*) 
         malloc(sizeof(struct Node*));
         if (oSymTable->table[i] == NULL)
             return NULL; 
         oSymTable->table[i] = NULL; 
-
-     } 
+         
+     } */
 
      
   
@@ -209,6 +198,7 @@ const void *pvValue) {
 
     newIndex = SymTable_hash(pcKey, 
     binCountArray[oSymTable->index]); 
+    
     for (currentNode = oSymTable->table[newIndex]; currentNode != NULL; 
     currentNode = nextNode)
     {
@@ -228,13 +218,13 @@ const void *pvValue) {
     make sure we dont go over the hash table limit, and call expand
     if we need to and get the new hash index since we have just 
     changed the size */
-    /* if (oSymTable->count == binCountArray[oSymTable->index] &&
-      oSymTable->index < 8) {
+     if (oSymTable->count == binCountArray[oSymTable->index] &&
+      oSymTable->index < 7) {
          
             SymTable_expand(oSymTable); 
             newIndex = SymTable_hash(pcKey, binCountArray
             [(oSymTable->index)]); 
-      } */
+      } 
         
     newNode = (struct Node*)malloc(sizeof(struct Node)); 
             if (newNode == NULL) {
