@@ -18,13 +18,13 @@ struct SymTable
     /* this index is the index into the global variable binCountArray
     that gets the correct size of the hash table */
     int index; 
-   // size_t binCount; 
+   
 
     /* need to keep track of count of all bindings we add */ 
     size_t count; 
 
     /* our array of Node pointers that is our hash table */
-    struct Node *table[];
+    struct Node  **table;
      
 
 };
@@ -242,7 +242,7 @@ const void *pvValue) {
             
             newNode->Value = pvValue; 
            
-          //  printf("%s", oSymTable->table[2]); 
+          
             newNode->next = oSymTable->table[newIndex]; 
             
             oSymTable->table[newIndex] = newNode;
